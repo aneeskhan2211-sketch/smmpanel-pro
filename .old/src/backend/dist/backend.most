@@ -1,0 +1,498 @@
+// Version: 1.0.0
+type ActivityType__996153997 =
+  {#cashback; #coupon; #dailyLogin; #firstOrder; #referralEarn; #spinWheel};
+type AdminConfig__116069017 =
+  {
+    autoRefundHours : Nat;
+    fraudDuplicateLinkThreshold : Nat;
+    fraudVelocityLimit : Nat;
+    globalMarginPercent : Float;
+    maxConcurrentOrdersPerLink : Nat;
+    maxOrdersPerUserPerDay : Nat;
+    minUserAgeDays : Nat;
+    referralsEnabled : Bool;
+    subscriptionsEnabled : Bool
+  };
+type AdminPricingRule__296856392 =
+  {
+    var basicMargin : Float;
+    createdAt : Timestamp__301639476;
+    var currencyOverrides : [(Text, Float)];
+    id : Nat;
+    var isActive : Bool;
+    var premiumMargin : Float;
+    var recommendedMargin : Float;
+    var targetServices : [ServiceId__271116140]
+  };
+type AlertAction__358224661 = {#blocked; #flagged; #whitelisted};
+type AlertType__252921038 =
+  {#bulkOrders; #duplicateLink; #highVelocity; #lowServiceRatio};
+type ApiKeyId__621843262 = Nat;
+type ApiKey__654816196 =
+  {
+    createdAt : Timestamp__301639476;
+    id : ApiKeyId__621843262;
+    var isActive : Bool;
+    keyHash : Text;
+    var lastUsed : ?Timestamp__301639476;
+    maskedKey : Text;
+    var name : Text;
+    var usageCount : Nat;
+    userId : UserId__158757552
+  };
+type BundleService__322254171 =
+  {quantity : Nat; serviceId : ServiceId__271116140};
+type Bundle__240715889 =
+  {
+    var badge : Text;
+    var description : Text;
+    var discountedPrice : Nat;
+    var estimatedDeliveryHours : Nat;
+    var hasPremiumUpgrade : Bool;
+    id : Nat;
+    var imageEmoji : Text;
+    var isActive : Bool;
+    var name : Text;
+    var originalPrice : Nat;
+    var services : [BundleService__322254171]
+  };
+type Coupon__625612663 =
+  {
+    var applicableServices : [ServiceId__271116140];
+    var code : Text;
+    createdAt : Timestamp__301639476;
+    var discountPercentage : Float;
+    var expiryDate : Timestamp__301639476;
+    id : Nat;
+    var isActive : Bool;
+    var maxUsageCount : Nat;
+    var usageCount : Nat
+  };
+type Currency__64741720 =
+  {
+    code : Text;
+    var displayName : Text;
+    var exchangeRate : Float;
+    var flag : Text;
+    var isActive : Bool;
+    var symbol : Text
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type EngagementLog__1069222121 =
+  {
+    activityType : ActivityType__996153997;
+    amount : Nat;
+    id : Nat;
+    timestamp : Timestamp__301639476;
+    userId : UserId__158757552
+  };
+type FraudAlert__865427570 =
+  {
+    var actionTaken : AlertAction__358224661;
+    alertType : AlertType__252921038;
+    id : Nat;
+    orderId : ?Text;
+    var resolved : Bool;
+    riskScore : Nat;
+    timestamp : Int;
+    userId : Text
+  };
+type Int__270357528 = Int__616954475;
+type Int__616954475 = Int;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type LevelName__174722242 = {#bronze; #gold; #platinum; #silver};
+type LogStatus__52336462 = {#error; #success};
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type NotificationId__307495059 = Nat;
+type NotificationType__908192046 =
+  {#order_update; #promo; #support_reply; #wallet_alert};
+type Notification__264708741 =
+  {
+    createdAt : Timestamp__301639476;
+    id : NotificationId__307495059;
+    var isRead : Bool;
+    message : Text;
+    notifType : NotificationType__908192046;
+    userId : UserId__158757552
+  };
+type OrderId__197865225 = Nat;
+type OrderStatus__272730104 =
+  {#completed; #failed; #pending; #processing; #refunded};
+type Order__141779993 =
+  {
+    var completedAt : ?Timestamp__301639476;
+    createdAt : Timestamp__301639476;
+    estimatedDelivery : Timestamp__301639476;
+    id : OrderId__197865225;
+    var link : Text;
+    quantity : Nat;
+    serviceId : ServiceId__271116140;
+    var status : OrderStatus__272730104;
+    totalPrice : Nat;
+    userId : UserId__158757552
+  };
+type PlanTier__177347214 = {#free; #premium; #pro};
+type Platform__240336292 =
+  {
+    #ai;
+    #business;
+    #facebook;
+    #instagram;
+    #telegram;
+    #tiktok;
+    #twitter;
+    #website;
+    #youtube
+  };
+type ProviderStatus__982943566 = {#active; #inactive; #testing};
+type Provider__746432410 =
+  {
+    var apiKeyMasked : Text;
+    var apiUrl : Text;
+    var avgResponseMs : Nat;
+    var commissionPercent : Float;
+    var failedLast24h : Nat;
+    id : Nat;
+    var name : Text;
+    var priority : Nat;
+    var status : ProviderStatus__982943566;
+    var successRate : Float
+  };
+type ReferralStatus__420933440 = {#confirmed; #expired; #pending};
+type Referral__873970759 =
+  {
+    var commissionPercent : Float;
+    createdAt : Timestamp__301639476;
+    var earnings : Nat;
+    id : Nat;
+    referredUserId : UserId__158757552;
+    referrerId : UserId__158757552;
+    var status : ReferralStatus__420933440
+  };
+type RefillPolicy__56444072 = {#guaranteed; #limited; #none};
+type Review__652323004 =
+  {
+    var adminApproved : Bool;
+    var comment : Text;
+    createdAt : Timestamp__301639476;
+    var displayOrder : Nat;
+    id : Nat;
+    var rating : Nat;
+    serviceId : ServiceId__271116140;
+    userId : UserId__158757552
+  };
+type RewardType__927223124 =
+  {#cashback; #daily; #firstOrder; #referral; #spinWheel};
+type ServiceId__271116140 = Nat;
+type ServiceTier__64127380 =
+  {
+    var badge : Text;
+    var deliveryMultiplier : Float;
+    var description : Text;
+    var displayName : Text;
+    var features : [Text];
+    id : Nat;
+    var isActive : Bool;
+    var marginMultiplier : Float;
+    var name : TierName__658451915;
+    var priorityProcessing : Bool;
+    var refillGuarantee : Bool;
+    var supportLevel : SupportLevel__189056857
+  };
+type Service__980514341 =
+  {
+    var baseCost : Nat;
+    var basicPrice : Nat;
+    var category : Text;
+    var currencyPrices : [(Text, Float)];
+    var deliveryTimeHours : Nat;
+    var hasRefill : Bool;
+    id : ServiceId__271116140;
+    var isActive : Bool;
+    var maxQuantity : Nat;
+    var minQuantity : Nat;
+    var name : Text;
+    var platform : Platform__240336292;
+    var premiumPrice : Nat;
+    var pricePerThousand : Nat;
+    var providerId : ?Nat;
+    var qualityRating : Nat;
+    var recommendedPrice : Nat;
+    var refillPolicy : RefillPolicy__56444072;
+    var reliabilityScore : Nat;
+    var retentionScore : Nat;
+    var successRate : Nat;
+    var urgencySignal : Text
+  };
+type SubscriptionPlanId__364310059 = Nat;
+type SubscriptionPlan__184707528 =
+  {
+    discountPercent : Nat;
+    features : [Text];
+    id : SubscriptionPlanId__364310059;
+    name : Text;
+    priceMonthly : Nat;
+    tier : PlanTier__177347214
+  };
+type SupportLevel__189056857 = {#dedicated; #priority; #standard};
+type SystemLog__658055159 =
+  {
+    action : Text;
+    actorId : Text;
+    details : Text;
+    id : Nat;
+    status : LogStatus__52336462;
+    targetId : Text;
+    targetType : Text;
+    timestamp : Int
+  };
+type TicketCategory__518121598 = {#billing; #general; #order; #technical};
+type TicketId__224230191 = Nat;
+type TicketMessageId__46996669 = Nat;
+type TicketMessage__170745503 =
+  {
+    authorId : UserId__158757552;
+    createdAt : Timestamp__301639476;
+    id : TicketMessageId__46996669;
+    isAdminReply : Bool;
+    message : Text;
+    ticketId : TicketId__224230191
+  };
+type TicketStatus__903820774 = {#closed; #in_progress; #open; #resolved};
+type Ticket__555771949 =
+  {
+    category : TicketCategory__518121598;
+    createdAt : Timestamp__301639476;
+    id : TicketId__224230191;
+    var lastUpdatedAt : Timestamp__301639476;
+    var status : TicketStatus__903820774;
+    var subject : Text;
+    userId : UserId__158757552
+  };
+type TierName__658451915 = {#basic; #premium; #recommended};
+type Time__796480547 = Int__270357528;
+type Time__900049286 = Time__796480547;
+type Timestamp__301639476 = Time__900049286;
+type TransactionId__138870153 = Nat;
+type TransactionStatus__52851611 = {#completed; #failed; #pending};
+type TransactionType__907911643 = {#credit; #debit; #refund};
+type Transaction__15087323 =
+  {
+    amount : Nat;
+    createdAt : Timestamp__301639476;
+    description : Text;
+    id : TransactionId__138870153;
+    status : TransactionStatus__52851611;
+    txType : TransactionType__907911643;
+    userId : UserId__158757552
+  };
+type UserId__158757552 = Principal;
+type UserLevel__704918798 =
+  {
+    var badge : Text;
+    var cashbackPercent : Float;
+    var displayName : Text;
+    id : Nat;
+    var levelName : LevelName__174722242;
+    var maxSpend : Nat;
+    var minSpend : Nat;
+    var perks : [Text]
+  };
+type UserRole__41952412 = {#admin; #user};
+type UserSubscription__695354240 =
+  {
+    var autoRenew : Bool;
+    var endDate : Timestamp__301639476;
+    var isActive : Bool;
+    planId : SubscriptionPlanId__364310059;
+    var startDate : Timestamp__301639476;
+    userId : UserId__158757552
+  };
+type User__98118558 =
+  {
+    var avatar : ?Text;
+    createdAt : Timestamp__301639476;
+    var email : Text;
+    id : UserId__158757552;
+    var role : UserRole__41952412;
+    var username : Text
+  };
+type WalletReward__91485322 =
+  {
+    var amount : Nat;
+    var frequency : Text;
+    id : Nat;
+    var isActive : Bool;
+    var percentageAmount : Float;
+    var rewardType : RewardType__927223124
+  };
+type Wallet__955312146 = {var balance : Nat; userId : UserId__158757552};
+actor {
+  stable adminConfig : {var value : AdminConfig__116069017};
+  stable adminLogs :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?SystemLog__658055159]];
+      var elementIndex : Nat__490723111
+    };
+  stable var adminNextAlertId : Nat;
+  stable var adminNextLogId : Nat;
+  stable var adminNextProviderId : Nat;
+  stable apiKeys :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ApiKey__654816196]];
+      var elementIndex : Nat__490723111
+    };
+  stable bundles :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Bundle__240715889]];
+      var elementIndex : Nat__490723111
+    };
+  stable coupons :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Coupon__625612663]];
+      var elementIndex : Nat__490723111
+    };
+  stable currencies :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Currency__64741720]];
+      var elementIndex : Nat__490723111
+    };
+  stable engagementLogs :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?EngagementLog__1069222121]];
+      var elementIndex : Nat__490723111
+    };
+  stable fraudAlerts :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?FraudAlert__865427570]];
+      var elementIndex : Nat__490723111
+    };
+  stable var nextApiKeyId : Nat;
+  stable var nextBundleId : Nat;
+  stable var nextCouponId : Nat;
+  stable var nextEngagementLogId : Nat;
+  stable var nextMessageId : Nat;
+  stable var nextNotifId : Nat;
+  stable var nextPricingRuleId : Nat;
+  stable var nextReferralId : Nat;
+  stable var nextReviewId : Nat;
+  stable var nextServiceId : Nat;
+  stable var nextTicketId : Nat;
+  stable var nextTierId : Nat;
+  stable var nextWalletRewardId : Nat;
+  stable notifications :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Notification__264708741]];
+      var elementIndex : Nat__490723111
+    };
+  stable orders :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Order__141779993]];
+      var elementIndex : Nat__490723111
+    };
+  stable var ordersNextNotifId : Nat;
+  stable plans :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?SubscriptionPlan__184707528]];
+      var elementIndex : Nat__490723111
+    };
+  stable pricingRules :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?AdminPricingRule__296856392]];
+      var elementIndex : Nat__490723111
+    };
+  stable providers :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Provider__746432410]];
+      var elementIndex : Nat__490723111
+    };
+  stable referrals :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Referral__873970759]];
+      var elementIndex : Nat__490723111
+    };
+  stable reviews :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Review__652323004]];
+      var elementIndex : Nat__490723111
+    };
+  stable serviceTiers :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ServiceTier__64127380]];
+      var elementIndex : Nat__490723111
+    };
+  stable services :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Service__980514341]];
+      var elementIndex : Nat__490723111
+    };
+  stable subscriptions :
+    {
+      var root :
+        Node__46230540<UserId__158757552, UserSubscription__695354240>;
+      var size : Nat__490723111
+    };
+  stable ticketMessages :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?TicketMessage__170745503]];
+      var elementIndex : Nat__490723111
+    };
+  stable tickets :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Ticket__555771949]];
+      var elementIndex : Nat__490723111
+    };
+  stable var ticketsNextNotifId : Nat;
+  stable transactions :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Transaction__15087323]];
+      var elementIndex : Nat__490723111
+    };
+  stable userLevels :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?UserLevel__704918798]];
+      var elementIndex : Nat__490723111
+    };
+  stable users :
+    {
+      var root : Node__46230540<UserId__158757552, User__98118558>;
+      var size : Nat__490723111
+    };
+  stable walletRewards :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?WalletReward__91485322]];
+      var elementIndex : Nat__490723111
+    };
+  stable wallets :
+    {
+      var root : Node__46230540<UserId__158757552, Wallet__955312146>;
+      var size : Nat__490723111
+    }
+};

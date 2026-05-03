@@ -1,0 +1,616 @@
+type WalletRewardPublic = 
+ record {
+   amount: nat;
+   frequency: text;
+   id: nat;
+   isActive: bool;
+   percentageAmount: float64;
+   rewardType: RewardType;
+ };
+type UserSubscriptionPublic = 
+ record {
+   autoRenew: bool;
+   endDate: Timestamp;
+   isActive: bool;
+   planId: SubscriptionPlanId;
+   startDate: Timestamp;
+   userId: UserId;
+ };
+type UserStats = 
+ record {
+   activeOrders: nat;
+   completedOrders: nat;
+   totalOrders: nat;
+   totalSpend: nat;
+ };
+type UserRole = 
+ variant {
+   admin;
+   user;
+ };
+type UserPublic = 
+ record {
+   avatar: opt text;
+   createdAt: Timestamp;
+   email: text;
+   id: UserId;
+   role: UserRole;
+   username: text;
+ };
+type UserLevelPublic = 
+ record {
+   badge: text;
+   cashbackPercent: float64;
+   displayName: text;
+   id: nat;
+   levelName: LevelName;
+   maxSpend: nat;
+   minSpend: nat;
+   perks: vec text;
+ };
+type UserId = principal;
+type TransactionType = 
+ variant {
+   credit;
+   debit;
+   refund;
+ };
+type TransactionStatus = 
+ variant {
+   completed;
+   failed;
+   pending;
+ };
+type TransactionId = nat;
+type Transaction = 
+ record {
+   amount: nat;
+   createdAt: Timestamp;
+   description: text;
+   id: TransactionId;
+   status: TransactionStatus;
+   txType: TransactionType;
+   userId: UserId;
+ };
+type TopServiceStat = 
+ record {
+   name: text;
+   revenue: float64;
+   serviceId: nat;
+   unitsSold: nat;
+ };
+type Timestamp = int;
+type TierName = 
+ variant {
+   basic;
+   premium;
+   recommended;
+ };
+type TicketWithMessages = 
+ record {
+   messages: vec TicketMessage;
+   ticket:
+    record {
+      category: TicketCategory;
+      createdAt: Timestamp;
+      id: TicketId;
+      lastUpdatedAt: Timestamp;
+      status: TicketStatus;
+      subject: text;
+      userId: UserId;
+    };
+ };
+type TicketStatus = 
+ variant {
+   closed;
+   in_progress;
+   open;
+   resolved;
+ };
+type TicketPublic = 
+ record {
+   category: TicketCategory;
+   createdAt: Timestamp;
+   id: TicketId;
+   lastUpdatedAt: Timestamp;
+   status: TicketStatus;
+   subject: text;
+   userId: UserId;
+ };
+type TicketMessageId = nat;
+type TicketMessage = 
+ record {
+   authorId: UserId;
+   createdAt: Timestamp;
+   id: TicketMessageId;
+   isAdminReply: bool;
+   message: text;
+   ticketId: TicketId;
+ };
+type TicketId = nat;
+type TicketCategory = 
+ variant {
+   billing;
+   general;
+   order;
+   technical;
+ };
+type SystemLog = 
+ record {
+   action: text;
+   actorId: text;
+   details: text;
+   id: nat;
+   status: LogStatus;
+   targetId: text;
+   targetType: text;
+   timestamp: int;
+ };
+type SupportLevel = 
+ variant {
+   dedicated;
+   priority;
+   standard;
+ };
+type SubscriptionPlanId = nat;
+type SubscriptionPlan = 
+ record {
+   discountPercent: nat;
+   features: vec text;
+   id: SubscriptionPlanId;
+   name: text;
+   priceMonthly: nat;
+   tier: PlanTier;
+ };
+type ServiceTierPublic = 
+ record {
+   badge: text;
+   deliveryMultiplier: float64;
+   description: text;
+   displayName: text;
+   features: vec text;
+   id: nat;
+   isActive: bool;
+   marginMultiplier: float64;
+   name: TierName;
+   priorityProcessing: bool;
+   refillGuarantee: bool;
+   supportLevel: SupportLevel;
+ };
+type ServiceStat = 
+ record {
+   name: text;
+   profitMarginPercent: float64;
+   serviceId: nat;
+   totalRevenue: float64;
+   unitsSold: nat;
+ };
+type ServiceSort = 
+ variant {
+   best;
+   cheapest;
+   fastest;
+ };
+type ServicePublic = 
+ record {
+   baseCost: nat;
+   basicPrice: nat;
+   category: text;
+   currencyPrices: vec record {
+                         text;
+                         float64;
+                       };
+   deliveryTimeHours: nat;
+   hasRefill: bool;
+   id: ServiceId;
+   isActive: bool;
+   maxQuantity: nat;
+   minQuantity: nat;
+   name: text;
+   platform: Platform;
+   premiumPrice: nat;
+   pricePerThousand: nat;
+   providerId: opt nat;
+   qualityRating: nat;
+   recommendedPrice: nat;
+   refillPolicy: RefillPolicy;
+   reliabilityScore: nat;
+   retentionScore: nat;
+   successRate: nat;
+   urgencySignal: text;
+ };
+type ServiceId = nat;
+type RewardType = 
+ variant {
+   cashback;
+   daily;
+   firstOrder;
+   referral;
+   spinWheel;
+ };
+type ReviewPublic = 
+ record {
+   adminApproved: bool;
+   comment: text;
+   createdAt: Timestamp;
+   displayOrder: nat;
+   id: nat;
+   rating: nat;
+   serviceId: ServiceId;
+   userId: UserId;
+ };
+type RefillPolicy = 
+ variant {
+   guaranteed;
+   limited;
+   none;
+ };
+type ReferralStatus = 
+ variant {
+   confirmed;
+   expired;
+   pending;
+ };
+type ReferralPublic = 
+ record {
+   commissionPercent: float64;
+   createdAt: Timestamp;
+   earnings: nat;
+   id: nat;
+   referredUserId: UserId;
+   referrerId: UserId;
+   status: ReferralStatus;
+ };
+type ProviderStatus = 
+ variant {
+   active;
+   inactive;
+   testing;
+ };
+type ProviderPublic = 
+ record {
+   apiKeyMasked: text;
+   apiUrl: text;
+   avgResponseMs: nat;
+   commissionPercent: float64;
+   failedLast24h: nat;
+   id: nat;
+   name: text;
+   priority: nat;
+   status: ProviderStatus;
+   successRate: float64;
+ };
+type Platform = 
+ variant {
+   ai;
+   business;
+   facebook;
+   instagram;
+   telegram;
+   tiktok;
+   twitter;
+   website;
+   youtube;
+ };
+type PlanTier = 
+ variant {
+   free;
+   premium;
+   pro;
+ };
+type PlaceOrderRequest = 
+ record {
+   link: text;
+   quantity: nat;
+   serviceId: ServiceId;
+ };
+type OrderStatus = 
+ variant {
+   completed;
+   failed;
+   pending;
+   processing;
+   refunded;
+ };
+type OrderPublic = 
+ record {
+   completedAt: opt Timestamp;
+   createdAt: Timestamp;
+   estimatedDelivery: Timestamp;
+   id: OrderId;
+   link: text;
+   quantity: nat;
+   serviceId: ServiceId;
+   status: OrderStatus;
+   totalPrice: nat;
+   userId: UserId;
+ };
+type OrderId = nat;
+type NotificationType = 
+ variant {
+   order_update;
+   promo;
+   support_reply;
+   wallet_alert;
+ };
+type NotificationPublic = 
+ record {
+   createdAt: Timestamp;
+   id: NotificationId;
+   isRead: bool;
+   message: text;
+   notifType: NotificationType;
+   userId: UserId;
+ };
+type NotificationId = nat;
+type LogStatus = 
+ variant {
+   error;
+   success;
+ };
+type LevelName = 
+ variant {
+   bronze;
+   gold;
+   platinum;
+   silver;
+ };
+type FraudAlertPublic = 
+ record {
+   actionTaken: AlertAction;
+   alertType: AlertType;
+   id: nat;
+   orderId: opt text;
+   resolved: bool;
+   riskScore: nat;
+   timestamp: int;
+   userId: text;
+ };
+type EngagementLog = 
+ record {
+   activityType: ActivityType;
+   amount: nat;
+   id: nat;
+   timestamp: Timestamp;
+   userId: UserId;
+ };
+type DashboardStats = 
+ record {
+   avgOrderValue: float64;
+   dailyOrders: vec nat;
+   dailyRevenue: vec float64;
+   newUsersThisMonth: nat;
+   profitMarginPercent: float64;
+   subscriptionRevenue: record {
+                          free: nat;
+                          premium: nat;
+                          pro: nat;
+                        };
+   topServices: vec TopServiceStat;
+   totalActiveOrders: nat;
+   totalOrders: nat;
+   totalRevenue: float64;
+   totalUsers: nat;
+ };
+type CurrencyPublic = 
+ record {
+   code: text;
+   displayName: text;
+   exchangeRate: float64;
+   flag: text;
+   isActive: bool;
+   symbol: text;
+ };
+type CouponPublic = 
+ record {
+   applicableServices: vec ServiceId;
+   code: text;
+   createdAt: Timestamp;
+   discountPercentage: float64;
+   expiryDate: Timestamp;
+   id: nat;
+   isActive: bool;
+   maxUsageCount: nat;
+   usageCount: nat;
+ };
+type BundleService = 
+ record {
+   quantity: nat;
+   serviceId: ServiceId;
+ };
+type BundlePublic = 
+ record {
+   badge: text;
+   description: text;
+   discountedPrice: nat;
+   estimatedDeliveryHours: nat;
+   hasPremiumUpgrade: bool;
+   id: nat;
+   imageEmoji: text;
+   isActive: bool;
+   name: text;
+   originalPrice: nat;
+   services: vec BundleService;
+ };
+type ApiKeyPublic = 
+ record {
+   createdAt: Timestamp;
+   id: ApiKeyId;
+   isActive: bool;
+   lastUsed: opt Timestamp;
+   maskedKey: text;
+   name: text;
+   usageCount: nat;
+   userId: UserId;
+ };
+type ApiKeyId = nat;
+type AlertType = 
+ variant {
+   bulkOrders;
+   duplicateLink;
+   highVelocity;
+   lowServiceRatio;
+ };
+type AlertAction = 
+ variant {
+   blocked;
+   flagged;
+   whitelisted;
+ };
+type AdminPricingRulePublic = 
+ record {
+   basicMargin: float64;
+   createdAt: Timestamp;
+   currencyOverrides: vec record {
+                            text;
+                            float64;
+                          };
+   id: nat;
+   isActive: bool;
+   premiumMargin: float64;
+   recommendedMargin: float64;
+   targetServices: vec ServiceId;
+ };
+type AdminConfig = 
+ record {
+   autoRefundHours: nat;
+   fraudDuplicateLinkThreshold: nat;
+   fraudVelocityLimit: nat;
+   globalMarginPercent: float64;
+   maxConcurrentOrdersPerLink: nat;
+   maxOrdersPerUserPerDay: nat;
+   minUserAgeDays: nat;
+   referralsEnabled: bool;
+   subscriptionsEnabled: bool;
+ };
+type ActivityType = 
+ variant {
+   cashback;
+   coupon;
+   dailyLogin;
+   firstOrder;
+   referralEarn;
+   spinWheel;
+ };
+service : {
+  adminAddBundle: (name: text, description: text, services:
+   vec BundleService, originalPrice: nat, discountedPrice: nat,
+   estimatedDeliveryHours: nat, hasPremiumUpgrade: bool, badge: text,
+   imageEmoji: text) -> (BundlePublic);
+  adminAddCoupon: (code: text, discountPercentage: float64, maxUsageCount:
+   nat, expiryDate: Timestamp, applicableServices: vec ServiceId) ->
+   (CouponPublic);
+  adminAddCurrency: (code: text, symbol: text, flag: text, displayName: 
+   text, exchangeRate: float64) -> (CurrencyPublic);
+  adminAddFunds: (userId: UserId, amount: nat, description: text) ->
+   (Transaction);
+  adminAddPricingRule: (targetServices: vec ServiceId, basicMargin: float64,
+   recommendedMargin: float64, premiumMargin: float64, currencyOverrides:
+   vec record {
+         text;
+         float64;
+       }) -> (AdminPricingRulePublic);
+  adminAddProvider: (name: text, apiUrl: text, apiKey: text,
+   commissionPercent: float64, priority: nat) -> (ProviderPublic);
+  adminAddService: (name: text, platform: Platform, pricePerThousand: 
+   nat, minQuantity: nat, maxQuantity: nat, deliveryTimeHours: nat,
+   hasRefill: bool, qualityRating: nat, reliabilityScore: nat) ->
+   (ServicePublic);
+  adminAdjustUserWallet: (userId: principal, amount: float64, reason: 
+   text, isCredit: bool) -> ();
+  adminApproveReview: (reviewId: nat, displayOrder: nat) -> ();
+  adminBanUser: (userId: principal, reason: text) -> ();
+  adminBatchUpdateServicePrices: (serviceIds: vec nat, percentageChange:
+   float64) -> ();
+  adminCancelOrder: (orderId: nat, reason: text) -> ();
+  adminGetAllOrders: (statusFilter: opt text, limit: nat, offset: nat) ->
+   (vec OrderPublic) query;
+  adminGetAllUsers: (statusFilter: opt text, tierFilter: opt text, limit:
+   nat, offset: nat) -> (vec UserPublic) query;
+  adminGetConfig: () -> (AdminConfig) query;
+  adminGetDashboardStats: () -> (DashboardStats) query;
+  adminGetFraudAlerts: (resolved: opt bool, riskLevel: opt nat, limit: 
+   nat, offset: nat) -> (vec FraudAlertPublic) query;
+  adminGetLogs: (actionFilter: opt text, limit: nat, offset: nat) ->
+   (vec SystemLog) query;
+  adminGetPricingRules: () -> (vec AdminPricingRulePublic) query;
+  adminGetProviders: () -> (vec ProviderPublic) query;
+  adminGetServiceStats: () -> (vec ServiceStat) query;
+  adminGetWalletRewards: () -> (vec WalletRewardPublic) query;
+  adminListOrders: () -> (vec OrderPublic) query;
+  adminListTickets: () -> (vec TicketPublic) query;
+  adminListUsers: () -> (vec UserPublic) query;
+  adminReplyToTicket: (ticketId: TicketId, message: text) -> (TicketMessage);
+  adminResolveFraudAlert: (alertId: nat, action: text) -> ();
+  adminSetUserRole: (targetId: UserId, role: UserRole) -> ();
+  adminUpdateBundle: (bundleId: nat, name: opt text, discountedPrice:
+   opt nat, isActive: opt bool) -> (bool);
+  adminUpdateConfig: (config: AdminConfig) -> ();
+  adminUpdateExchangeRate: (currencyCode: text, newRate: float64) -> (bool);
+  adminUpdateOrderManual: (orderId: nat, newStatus: opt text, newPrice:
+   opt float64, newQuantity: opt nat, reason: text) -> ();
+  adminUpdateOrderStatus: (orderId: OrderId, newStatus: OrderStatus) -> ();
+  adminUpdateProvider: (providerId: nat, status: opt text, commissionPercent:
+   opt float64, priority: opt nat) -> ();
+  adminUpdateService: (serviceId: ServiceId, name: text, pricePerThousand:
+   nat, isActive: bool) -> ();
+  adminUpdateServiceVisibility: (serviceId: nat, visible: bool) -> ();
+  adminUpdateTier: (tierId: nat, marginMultiplier: opt float64,
+   deliveryMultiplier: opt float64, features: opt vec text, isActive:
+   opt bool) -> (bool);
+  adminUpdateWalletReward: (rewardId: nat, amount: opt nat, percentageAmount:
+   opt float64, isActive: opt bool) -> ();
+  calculateTierPrice: (basePrice: nat, tierId: nat) -> (opt nat) query;
+  cancelMySubscription: () -> ();
+  cancelOrder: (orderId: OrderId) -> ();
+  claimDailyLoginReward: () -> (nat);
+  closeMyTicket: (ticketId: TicketId) -> ();
+  convertPrice: (amountINR: nat, currencyCode: text) -> (opt float64) query;
+  createReferral: (referredUserId: principal) -> (ReferralPublic);
+  createTicket: (subject: text, category: TicketCategory) -> (TicketPublic);
+  generateApiKey: (name: text) -> (ApiKeyPublic);
+  getAllApprovedReviews: (limit: nat) -> (vec ReviewPublic) query;
+  getBundle: (bundleId: nat) -> (opt BundlePublic) query;
+  getMyBalance: () -> (nat) query;
+  getMyEngagementHistory: (limit: nat) -> (vec EngagementLog) query;
+  getMyLevel: () -> (opt UserLevelPublic) query;
+  getMyNotifications: () -> (vec NotificationPublic) query;
+  getMyOrders: () -> (vec OrderPublic) query;
+  getMyProfile: () -> (UserPublic) query;
+  getMyReferrals: () -> (vec ReferralPublic) query;
+  getMyStats: () -> (UserStats) query;
+  getMySubscription: () -> (opt UserSubscriptionPublic) query;
+  getMyTickets: () -> (vec TicketPublic) query;
+  getMyTransactions: () -> (vec Transaction) query;
+  getOrderById: (orderId: OrderId) -> (opt OrderPublic) query;
+  getServicePricing: (basePriceINR: nat, serviceId: ServiceId) -> (float64,
+   float64, float64) query;
+  getServiceReviews: (serviceId: ServiceId, limit: nat) ->
+   (vec ReviewPublic) query;
+  getServicesByPlatform: (platform: Platform) -> (vec ServicePublic) query;
+  getServicesSorted: (sortBy: ServiceSort) -> (vec ServicePublic) query;
+  getSubscriptionPlans: () -> (vec SubscriptionPlan) query;
+  getTicketDetail: (ticketId: TicketId) -> (opt TicketWithMessages) query;
+  getUnreadNotificationCount: () -> (nat) query;
+  listBundles: () -> (vec BundlePublic) query;
+  listCurrencies: () -> (vec CurrencyPublic) query;
+  listMyApiKeys: () -> (vec ApiKeyPublic) query;
+  listMyCoupons: () -> (vec CouponPublic) query;
+  listServiceTiers: () -> (vec ServiceTierPublic) query;
+  listServices: () -> (vec ServicePublic) query;
+  listUserLevels: () -> (vec UserLevelPublic) query;
+  markNotificationRead: (notifId: NotificationId) -> ();
+  placeOrder: (req: PlaceOrderRequest) -> (OrderPublic);
+  registerUser: (username: text, email: text) -> (UserPublic);
+  replyToTicket: (ticketId: TicketId, message: text) -> (TicketMessage);
+  revokeApiKey: (keyId: ApiKeyId) -> ();
+  searchServices: (searchTerm: text) -> (vec ServicePublic) query;
+  spinWheelReward: () -> (nat);
+  submitReview: (serviceId: ServiceId, rating: nat, comment: text) ->
+   (ReviewPublic);
+  subscribeToPlan: (planId: SubscriptionPlanId, autoRenew: bool) ->
+   (UserSubscriptionPublic);
+  updateMyProfile: (username: text, email: text, avatar: opt text) ->
+   (UserPublic);
+  validateCoupon: (code: text, serviceId: ServiceId) -> (opt float64) query;
+}
