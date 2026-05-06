@@ -378,8 +378,18 @@ function ThemeSync() {
   const { theme } = useUIStore();
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.toggle("dark", theme === "dark");
-    root.classList.toggle("light", theme === "light");
+    if (theme === "dark") {
+      root.classList.add("dark");
+      root.classList.remove("light");
+    } else {
+      root.classList.add("light");
+      root.classList.remove("dark");
+    }
+    try {
+      localStorage.setItem("smm-theme", theme);
+    } catch (_) {
+      /* ignore */
+    }
   }, [theme]);
   return null;
 }

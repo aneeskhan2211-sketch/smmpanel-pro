@@ -14,10 +14,20 @@ interface UIState {
   setSearchQuery: (query: string) => void;
 }
 
+function getInitialTheme(): "dark" | "light" {
+  try {
+    const stored = localStorage.getItem("smm-theme");
+    if (stored === "light" || stored === "dark") return stored;
+  } catch (_) {
+    /* ignore */
+  }
+  return "dark";
+}
+
 export const useUIStore = create<UIState>()((set) => ({
   sidebarOpen: true,
   sidebarCollapsed: false,
-  theme: "dark",
+  theme: getInitialTheme(),
   searchQuery: "",
 
   setSidebarOpen: (open) => set({ sidebarOpen: open }),

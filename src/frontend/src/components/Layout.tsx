@@ -1,25 +1,8 @@
-import { cn } from "@/lib/utils";
-import { useUIStore } from "@/store/uiStore";
 import { Outlet } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
 
 export function Layout() {
-  const { theme, sidebarCollapsed } = useUIStore();
-
-  // Sync theme class on <html>
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-      root.classList.remove("light");
-    } else {
-      root.classList.add("light");
-      root.classList.remove("dark");
-    }
-  }, [theme]);
-
   return (
     <div
       className="min-h-screen bg-background flex flex-col"
@@ -29,18 +12,14 @@ export function Layout() {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <main
-          className={cn(
-            "flex-1 overflow-y-auto transition-all duration-300 bg-background",
-            "lg:ml-0",
-          )}
+          className="flex-1 overflow-y-auto bg-background"
+          style={{
+            transition: "margin-left 0.3s cubic-bezier(0.4,0,0.2,1)",
+            minWidth: 0,
+          }}
           data-ocid="layout.main_content"
         >
-          <div
-            className={cn(
-              "max-w-screen-xl mx-auto px-4 sm:px-6 py-6",
-              sidebarCollapsed ? "lg:pl-4" : "lg:pl-4",
-            )}
-          >
+          <div className="max-w-screen-xl mx-auto px-4 sm:px-6 py-6">
             <Outlet />
           </div>
         </main>

@@ -30400,10 +30400,18 @@ const useAuthStore = create()(
     }
   )
 );
+function getInitialTheme() {
+  try {
+    const stored = localStorage.getItem("smm-theme");
+    if (stored === "light" || stored === "dark") return stored;
+  } catch (_2) {
+  }
+  return "dark";
+}
 const useUIStore = create()((set2) => ({
   sidebarOpen: true,
   sidebarCollapsed: false,
-  theme: "dark",
+  theme: getInitialTheme(),
   searchQuery: "",
   setSidebarOpen: (open) => set2({ sidebarOpen: open }),
   toggleSidebar: () => set2((s2) => ({ sidebarOpen: !s2.sidebarOpen })),
@@ -55055,19 +55063,257 @@ function Navbar() {
   );
 }
 const NAV_ITEMS = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "New Order", href: "/new-order", icon: CirclePlus },
-  { label: "Services", href: "/services", icon: ShoppingBag },
-  { label: "Bundles", href: "/bundles", icon: Package },
-  { label: "Calculator", href: "/calculator", icon: Calculator },
-  { label: "AI Tools", href: "/ai-tools", icon: Bot },
-  { label: "Orders", href: "/orders", icon: ClipboardList },
-  { label: "Subscriptions", href: "/subscriptions", icon: RefreshCw },
-  { label: "API", href: "/api", icon: CodeXml },
-  { label: "Wallet", href: "/wallet", icon: Wallet },
-  { label: "Support", href: "/support", icon: Headphones },
-  { label: "Settings", href: "/settings", icon: Settings }
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    color: "#3B82F6",
+    glow: "rgba(59,130,246,0.45)"
+  },
+  {
+    label: "New Order",
+    href: "/new-order",
+    icon: CirclePlus,
+    color: "#22C55E",
+    glow: "rgba(34,197,94,0.45)"
+  },
+  {
+    label: "Services",
+    href: "/services",
+    icon: ShoppingBag,
+    color: "#8B5CF6",
+    glow: "rgba(139,92,246,0.45)"
+  },
+  {
+    label: "Bundles",
+    href: "/bundles",
+    icon: Package,
+    color: "#F59E0B",
+    glow: "rgba(245,158,11,0.45)"
+  },
+  {
+    label: "Calculator",
+    href: "/calculator",
+    icon: Calculator,
+    color: "#06B6D4",
+    glow: "rgba(6,182,212,0.45)"
+  },
+  {
+    label: "AI Tools",
+    href: "/ai-tools",
+    icon: Bot,
+    color: "#EC4899",
+    glow: "rgba(236,72,153,0.45)"
+  },
+  {
+    label: "Orders",
+    href: "/orders",
+    icon: ClipboardList,
+    color: "#F97316",
+    glow: "rgba(249,115,22,0.45)"
+  },
+  {
+    label: "Subscriptions",
+    href: "/subscriptions",
+    icon: CreditCard,
+    color: "#A78BFA",
+    glow: "rgba(167,139,250,0.45)"
+  },
+  {
+    label: "API",
+    href: "/api",
+    icon: CodeXml,
+    color: "#10B981",
+    glow: "rgba(16,185,129,0.45)"
+  },
+  {
+    label: "Wallet",
+    href: "/wallet",
+    icon: Wallet,
+    color: "#FBBF24",
+    glow: "rgba(251,191,36,0.45)"
+  },
+  {
+    label: "Support",
+    href: "/support",
+    icon: Headphones,
+    color: "#34D399",
+    glow: "rgba(52,211,153,0.45)"
+  },
+  {
+    label: "Settings",
+    href: "/settings",
+    icon: Settings,
+    color: "#94A3B8",
+    glow: "rgba(148,163,184,0.45)"
+  }
 ];
+const ADMIN_NAV = {
+  label: "Admin Panel",
+  href: "/admin/dashboard",
+  icon: Shield,
+  color: "#FB7185",
+  glow: "rgba(251,113,133,0.45)"
+};
+function NavButton({
+  item,
+  active,
+  onNavigate,
+  collapsed
+}) {
+  const Icon2 = item.icon;
+  const [iconKey, setIconKey] = reactExports.useState(0);
+  const [isFlashing, setIsFlashing] = reactExports.useState(false);
+  const [showTooltip, setShowTooltip] = reactExports.useState(false);
+  const handleClick = () => {
+    setIconKey((k2) => k2 + 1);
+    setIsFlashing(true);
+    setTimeout(() => setIsFlashing(false), 500);
+    onNavigate(item.href);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      className: "relative flex items-center w-full",
+      onMouseEnter: () => setShowTooltip(true),
+      onMouseLeave: () => setShowTooltip(false),
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: active && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          motion.div,
+          {
+            initial: { scaleY: 0, opacity: 0 },
+            animate: { scaleY: 1, opacity: 1 },
+            exit: { scaleY: 0, opacity: 0 },
+            transition: {
+              type: "spring",
+              stiffness: 400,
+              damping: 28,
+              duration: 0.3
+            },
+            className: "absolute left-0 top-1 bottom-1 w-[3px] rounded-full",
+            style: { background: item.color, transformOrigin: "top" }
+          },
+          "accent-bar"
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          motion.button,
+          {
+            whileHover: { scale: active ? 1 : 1.05 },
+            whileTap: { scale: 0.88 },
+            onClick: handleClick,
+            className: cn(
+              "relative flex items-center rounded-xl transition-all duration-200 overflow-hidden group",
+              collapsed ? "w-11 h-11 justify-center mx-auto" : "w-full h-11 px-3 gap-3",
+              active ? "" : "hover:bg-white/5"
+            ),
+            style: {
+              background: active ? `${item.color}22` : void 0,
+              boxShadow: active ? `0 0 16px ${item.glow}, inset 0 0 0 1px ${item.color}40` : void 0
+            },
+            "data-ocid": `sidebar.${item.label.toLowerCase().replace(/\s+/g, "_")}_link`,
+            "aria-label": item.label,
+            "aria-current": active ? "page" : void 0,
+            type: "button",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: isFlashing && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                motion.span,
+                {
+                  initial: { opacity: 0.6, scale: 0.4 },
+                  animate: { opacity: 0, scale: 2.8 },
+                  exit: { opacity: 0 },
+                  transition: { duration: 0.45, ease: "easeOut" },
+                  className: "absolute inset-0 rounded-xl pointer-events-none",
+                  style: { background: `${item.color}40` }
+                },
+                "ripple"
+              ) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                motion.div,
+                {
+                  animate: iconKey > 0 ? { rotate: [0, -14, 12, -6, 0], scale: [1, 1.15, 1] } : {},
+                  transition: { duration: 0.38, ease: "easeInOut" },
+                  className: "relative z-10 flex-shrink-0",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Icon2,
+                    {
+                      className: "h-[20px] w-[20px] transition-all duration-200",
+                      style: {
+                        color: item.color,
+                        filter: active ? `drop-shadow(0 0 6px ${item.glow})` : void 0
+                      }
+                    }
+                  )
+                },
+                iconKey
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: !collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                motion.span,
+                {
+                  initial: { opacity: 0, x: -8 },
+                  animate: { opacity: 1, x: 0 },
+                  exit: { opacity: 0, x: -8 },
+                  transition: { duration: 0.2, ease: "easeOut" },
+                  className: "relative z-10 text-sm font-medium leading-none truncate min-w-0",
+                  style: {
+                    color: active ? item.color : "#FFFFFF",
+                    textShadow: active ? `0 0 8px ${item.glow}` : void 0
+                  },
+                  children: item.label
+                }
+              ) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  className: "absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none",
+                  style: {
+                    background: `radial-gradient(circle at left center, ${item.color}18 0%, transparent 70%)`
+                  }
+                }
+              )
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: showTooltip && collapsed && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          motion.div,
+          {
+            initial: { opacity: 0, x: -6, scale: 0.92 },
+            animate: { opacity: 1, x: 0, scale: 1 },
+            exit: { opacity: 0, x: -4, scale: 0.94 },
+            transition: { duration: 0.15, ease: "easeOut" },
+            className: "absolute left-full ml-3 z-[100] pointer-events-none",
+            style: { top: "50%", transform: "translateY(-50%)" },
+            children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "px-2.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap shadow-xl",
+                style: {
+                  background: "#1a1f2e",
+                  border: `1px solid ${item.color}50`,
+                  color: item.color,
+                  boxShadow: `0 4px 20px rgba(0,0,0,0.6), 0 0 10px ${item.glow}`
+                },
+                children: [
+                  item.label,
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "span",
+                    {
+                      className: "absolute right-full top-1/2 -translate-y-1/2",
+                      style: {
+                        borderWidth: "5px 5px 5px 0",
+                        borderStyle: "solid",
+                        borderColor: `transparent ${item.color}50 transparent transparent`
+                      }
+                    }
+                  )
+                ]
+              }
+            )
+          }
+        ) })
+      ]
+    }
+  );
+}
 function Sidebar() {
   const {
     sidebarOpen,
@@ -55078,13 +55324,29 @@ function Sidebar() {
   const { isAdmin } = useAuthStore();
   const location2 = useLocation();
   const navigate = useNavigate();
-  const isActive = (href) => location2.pathname === href;
+  const [isFaded, setIsFaded] = reactExports.useState(false);
+  const fadeTimerRef = reactExports.useRef(null);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+  const resetFadeTimer = reactExports.useCallback(() => {
+    if (isMobile) return;
+    setIsFaded(false);
+    if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
+    fadeTimerRef.current = setTimeout(() => setIsFaded(true), 5e3);
+  }, [isMobile]);
+  reactExports.useEffect(() => {
+    if (isMobile) return;
+    resetFadeTimer();
+    return () => {
+      if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
+    };
+  }, [resetFadeTimer, isMobile]);
+  const isActive = (href) => href === "/admin/dashboard" ? location2.pathname.startsWith("/admin") : location2.pathname === href;
   const handleNavClick = (href) => {
     navigate({ to: href });
-    if (window.innerWidth < 1024) {
-      setSidebarOpen(false);
-    }
+    resetFadeTimer();
+    if (window.innerWidth < 1024) setSidebarOpen(false);
   };
+  const SIDEBAR_W = sidebarCollapsed ? 68 : 210;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: sidebarOpen && /* @__PURE__ */ jsxRuntimeExports.jsx(
       motion.div,
@@ -55096,145 +55358,178 @@ function Sidebar() {
         onClick: () => setSidebarOpen(false)
       }
     ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { initial: false, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
       motion.aside,
       {
         "data-ocid": "sidebar",
         animate: {
-          width: sidebarCollapsed ? 64 : 220,
-          x: sidebarOpen || window.innerWidth >= 1024 ? 0 : -260
+          width: SIDEBAR_W,
+          x: sidebarOpen || typeof window !== "undefined" && window.innerWidth >= 1024 ? 0 : -SIDEBAR_W - 10,
+          opacity: !isMobile && isFaded ? 0.35 : 1
         },
-        transition: { type: "spring", stiffness: 300, damping: 30 },
+        transition: {
+          width: { type: "spring", stiffness: 300, damping: 30 },
+          x: { type: "spring", stiffness: 300, damping: 30 },
+          opacity: { duration: 0.5, ease: "easeInOut" }
+        },
+        onMouseEnter: resetFadeTimer,
+        onMouseMove: resetFadeTimer,
         className: cn(
-          "fixed left-0 top-16 bottom-0 z-40 flex flex-col bg-sidebar border-r border-sidebar-border overflow-hidden",
+          "fixed left-0 bottom-0 z-40 flex flex-col overflow-hidden",
           "lg:sticky lg:translate-x-0"
         ),
-        style: { top: 64 },
+        style: {
+          top: 64,
+          background: "linear-gradient(180deg, #0d1117 0%, #0B0F19 50%, #0d1117 100%)",
+          borderRight: "1px solid rgba(255,255,255,0.06)",
+          boxShadow: "4px 0 24px rgba(0,0,0,0.4)"
+        },
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-3 pt-3 pb-1 lg:hidden", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs text-muted-foreground uppercase tracking-wider font-medium", children: "Menu" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center justify-end px-2 pt-3 pb-1 lg:hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => setSidebarOpen(false),
+              className: "p-1.5 rounded-md hover:bg-white/10 transition-colors",
+              "aria-label": "Close sidebar",
+              "data-ocid": "sidebar.close_button",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "h-4 w-4 text-muted-foreground" })
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: cn(
+                "flex pt-3 pb-2",
+                sidebarCollapsed ? "justify-center" : "justify-start px-4"
+              ),
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-[3px]", children: ["#3B82F6", "#22C55E", "#EC4899", "#F59E0B"].map((c2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "span",
+                {
+                  className: "block w-1 h-1 rounded-full opacity-70",
+                  style: { background: c2 }
+                },
+                c2
+              )) })
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "nav",
+            {
+              className: "flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto",
+              "aria-label": "Main navigation",
+              onMouseEnter: resetFadeTimer,
+              children: [
+                NAV_ITEMS.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  NavButton,
+                  {
+                    item,
+                    active: isActive(item.href),
+                    onNavigate: handleNavClick,
+                    collapsed: sidebarCollapsed
+                  },
+                  item.href
+                )),
+                isAdmin && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "div",
+                  {
+                    className: "my-1.5 mx-2",
+                    style: { height: 1, background: "rgba(255,255,255,0.07)" }
+                  }
+                ),
+                isAdmin && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  NavButton,
+                  {
+                    item: ADMIN_NAV,
+                    active: isActive(ADMIN_NAV.href),
+                    onNavigate: handleNavClick,
+                    collapsed: sidebarCollapsed
+                  },
+                  ADMIN_NAV.href
+                )
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden lg:flex flex-col items-center pb-4 pt-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: "w-8",
+                style: {
+                  height: 1,
+                  background: "rgba(255,255,255,0.07)",
+                  marginBottom: 8
+                }
+              }
+            ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "button",
               {
                 type: "button",
-                onClick: () => setSidebarOpen(false),
-                className: "p-1 rounded-md hover:bg-sidebar-accent transition-smooth",
-                "aria-label": "Close sidebar",
-                "data-ocid": "sidebar.close_button",
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "h-4 w-4" })
+                onClick: toggleSidebarCollapsed,
+                className: "w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors",
+                "aria-label": sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar",
+                "data-ocid": "sidebar.collapse_toggle_bottom",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  motion.div,
+                  {
+                    animate: { rotate: sidebarCollapsed ? 0 : 180 },
+                    transition: { type: "spring", stiffness: 280, damping: 22 },
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "h-4 w-4", style: { color: "#94A3B8" } })
+                  }
+                )
               }
             )
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "nav",
-            {
-              className: "flex-1 px-2 py-3 space-y-0.5 overflow-y-auto",
-              "aria-label": "Main navigation",
-              children: NAV_ITEMS.map((item) => {
-                const active = isActive(item.href);
-                const Icon2 = item.icon;
-                return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  motion.button,
-                  {
-                    whileHover: { x: active ? 0 : 2 },
-                    onClick: () => handleNavClick(item.href),
-                    className: cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-smooth group",
-                      active ? "bg-primary/15 text-primary border border-primary/20" : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
-                    ),
-                    "data-ocid": `sidebar.${item.label.toLowerCase().replace(" ", "_")}_link`,
-                    "aria-current": active ? "page" : void 0,
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        Icon2,
-                        {
-                          className: cn(
-                            "h-4.5 w-4.5 shrink-0",
-                            active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
-                          )
-                        }
-                      ),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: !sidebarCollapsed && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        motion.span,
-                        {
-                          initial: { opacity: 0, width: 0 },
-                          animate: { opacity: 1, width: "auto" },
-                          exit: { opacity: 0, width: 0 },
-                          className: "truncate",
-                          children: item.label
-                        }
-                      ) })
-                    ]
-                  },
-                  item.href
-                );
-              })
-            }
-          ),
-          isAdmin && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            motion.button,
-            {
-              whileHover: { x: 2 },
-              onClick: () => handleNavClick("/admin/dashboard"),
-              className: cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-smooth group",
-                location2.pathname.startsWith("/admin") ? "bg-primary/15 text-primary border border-primary/20" : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
-              ),
-              "data-ocid": "sidebar.admin_panel_link",
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Shield,
-                  {
-                    className: cn(
-                      "h-4.5 w-4.5 shrink-0",
-                      location2.pathname.startsWith("/admin") ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
-                    )
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: !sidebarCollapsed && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  motion.span,
-                  {
-                    initial: { opacity: 0, width: 0 },
-                    animate: { opacity: 1, width: "auto" },
-                    exit: { opacity: 0, width: 0 },
-                    className: "truncate",
-                    children: "Admin Panel"
-                  }
-                ) })
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden lg:flex px-2 pb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              onClick: toggleSidebarCollapsed,
-              className: "w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-sidebar-accent transition-smooth text-xs",
-              "aria-label": sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar",
-              "data-ocid": "sidebar.collapse_toggle",
-              children: sidebarCollapsed ? /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "h-4 w-4" }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronLeft, { className: "h-4 w-4" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Collapse" })
-              ] })
-            }
-          ) })
+          ] })
         ]
       }
-    ) })
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "hidden lg:block fixed z-50 pointer-events-none",
+        style: { top: "calc(64px + 50vh - 14px)", left: SIDEBAR_W },
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          motion.button,
+          {
+            type: "button",
+            onClick: toggleSidebarCollapsed,
+            animate: { x: "-50%" },
+            whileHover: {
+              scale: 1.15,
+              boxShadow: "0 0 16px rgba(59,130,246,0.5)"
+            },
+            whileTap: { scale: 0.88 },
+            transition: { type: "spring", stiffness: 400, damping: 20 },
+            className: "pointer-events-auto w-7 h-7 rounded-full flex items-center justify-center cursor-pointer",
+            style: {
+              background: "#0d1117",
+              border: "1px solid rgba(59,130,246,0.4)",
+              boxShadow: "0 0 8px rgba(59,130,246,0.25), 0 2px 8px rgba(0,0,0,0.5)"
+            },
+            "aria-label": sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar",
+            "data-ocid": "sidebar.collapse_toggle",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              motion.div,
+              {
+                animate: { rotate: sidebarCollapsed ? 0 : 180 },
+                transition: { type: "spring", stiffness: 280, damping: 22 },
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  ChevronRight,
+                  {
+                    className: "h-3.5 w-3.5",
+                    style: { color: "#3B82F6" }
+                  }
+                )
+              }
+            )
+          }
+        )
+      }
+    )
   ] });
 }
 function Layout() {
-  const { theme, sidebarCollapsed } = useUIStore();
-  reactExports.useEffect(() => {
-    const root2 = document.documentElement;
-    if (theme === "dark") {
-      root2.classList.add("dark");
-      root2.classList.remove("light");
-    } else {
-      root2.classList.add("light");
-      root2.classList.remove("dark");
-    }
-  }, [theme]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
@@ -55247,21 +55542,13 @@ function Layout() {
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             "main",
             {
-              className: cn(
-                "flex-1 overflow-y-auto transition-all duration-300 bg-background",
-                "lg:ml-0"
-              ),
+              className: "flex-1 overflow-y-auto bg-background",
+              style: {
+                transition: "margin-left 0.3s cubic-bezier(0.4,0,0.2,1)",
+                minWidth: 0
+              },
               "data-ocid": "layout.main_content",
-              children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                "div",
-                {
-                  className: cn(
-                    "max-w-screen-xl mx-auto px-4 sm:px-6 py-6",
-                    sidebarCollapsed ? "lg:pl-4" : "lg:pl-4"
-                  ),
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {})
-                }
-              )
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-screen-xl mx-auto px-4 sm:px-6 py-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) })
             }
           )
         ] }),
@@ -103717,8 +104004,17 @@ function ThemeSync() {
   const { theme } = useUIStore();
   reactExports.useEffect(() => {
     const root2 = document.documentElement;
-    root2.classList.toggle("dark", theme === "dark");
-    root2.classList.toggle("light", theme === "light");
+    if (theme === "dark") {
+      root2.classList.add("dark");
+      root2.classList.remove("light");
+    } else {
+      root2.classList.add("light");
+      root2.classList.remove("dark");
+    }
+    try {
+      localStorage.setItem("smm-theme", theme);
+    } catch (_2) {
+    }
   }, [theme]);
   return null;
 }

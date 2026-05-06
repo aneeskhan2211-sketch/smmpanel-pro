@@ -116,6 +116,10 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.8" },
         },
+        "sidebar-click-flash": {
+          "0%": { background: "rgba(59,130,246,0.35)", boxShadow: "0 0 12px rgba(59,130,246,0.4)" },
+          "100%": { background: "transparent", boxShadow: "none" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -123,6 +127,7 @@ export default {
         "fade-in": "fade-in 0.4s ease-out",
         "slide-up": "slide-up 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
         "pulse-soft": "pulse-soft 2s ease-in-out infinite",
+        "sidebar-click-flash": "sidebar-click-flash 0.5s ease-out forwards",
       },
     },
   },
